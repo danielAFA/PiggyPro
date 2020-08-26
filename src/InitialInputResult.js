@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import TotalCostDisplay from "./TotalCostDisplay"
-import Zoom from "@material-ui/core/Zoom"
 import { makeStyles } from "@material-ui/core/styles"
 import Grid from "@material-ui/core/Grid"
-//import CustomizationDisplay from "./CustomizationDisplay"
-import FlightCustomizationPanel from "./FlightCustomizationPanel"
-import HotelCustomizationPanel from "./HotelCustomizationPanel"
-import RestaurantCustomizationPanel from "./RestaurantCustomizationPanel"
 
-const useStyles = makeStyles((theme) => ({
+import FlightCustomizationPanel from "./panels/FlightCustomizationPanel"
+import HotelCustomizationPanel from "./panels/HotelCustomizationPanel"
+import RestaurantCustomizationPanel from "./panels/RestaurantCustomizationPanel"
+
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(2),
@@ -29,23 +28,11 @@ const useStyles = makeStyles((theme) => ({
 const InitialInputResult = React.memo(
   ({ requestData, responseData, customizationSwitchStates, peopleNumber }) => {
     const classes = useStyles()
-
-    const [response, updateResponse] = useState(responseData)
-    const { origin, destination } = requestData
+    const { origin, destination, days } = requestData
     const [flightCost, updateFlightCost] = useState(responseData["avgFlight"])
     const [hotelCost, updateHotelCost] = useState(responseData["avgHotel"])
     const [restaurantCost, updateRestaurantCost] = useState(
       responseData["avgRestaurant"]
-    )
-
-    console.log(responseData)
-    console.log(responseData)
-    console.log(flightCost)
-
-    const { days } = requestData
-
-    const [estimatedFinalCost, updateEstidatedFinalCost] = useState(
-      responseData["initialTotal"]
     )
 
     const flightData = (({ avgFlight, airlineNames, avgLF, avgMF, avgHF }) => ({
@@ -87,18 +74,6 @@ const InitialInputResult = React.memo(
       avgRestaurant,
     }))(responseData)
 
-    const AnimateTotalAppearance = (props) => {
-      return (
-        <div {...props}>
-          <TotalCostDisplay
-            totalEstimateCost={estimatedFinalCost}
-            customizationSwitchStates={customizationSwitchStates}
-            updateEstidatedFinalCost={updateEstidatedFinalCost}
-            peopleNumber={peopleNumber}
-          />
-        </div>
-      )
-    }
     return (
       <>
         <Grid container className={classes.root} spacing={2}>
